@@ -1,0 +1,168 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalLarge {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 750px;
+  max-width: 95%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.reciboLayout {
+  background-color: #ffe6f0;
+  padding: 20px 20px 20px 90px; /* Aumentado o padding à esquerda */
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #333;
+  border: 2px solid #fbd3e6;
+  position: relative; /* necessário para .verticalBar funcionar */
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fbd3e6;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+}
+
+.numeracao {
+  text-align: right;
+  font-weight: bold;
+  color: #333;
+}
+
+.section {
+  background: white;
+  border-left: 4px solid #3498db;
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.section span {
+  color: #3498db;
+  font-weight: bold;
+}
+
+.bottomRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.dataAssinatura {
+  text-align: left;
+  min-width: 200px;
+}
+
+.rodape {
+  font-size: 12px;
+  margin-top: 25px;
+  text-align: center;
+  color: #1d3557;
+  font-weight: 500;
+}
+
+.editSection {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.editSection label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.editSection input {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.gerarBtn {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.gerarBtn:hover {
+  background-color: #2980b9;
+}
+
+.cancelBtn:hover {
+  background-color: #c0392b;
+}
+
+.verticalBar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) rotate(180deg);
+  width: 60px;
+  height: 60%;
+  background-color: #fbb6ce;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  writing-mode: vertical-rl;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .modalLarge {
+    width: 90%;
+  }
+}
