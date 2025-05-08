@@ -24,8 +24,3 @@ src/config/serviceAccountKey.json
 *.njsproj
 *.sln
 *.sw?
-
-# Credentials
-src/config/credentials.json
-src/config/client_secret_*.json
-tokens.json

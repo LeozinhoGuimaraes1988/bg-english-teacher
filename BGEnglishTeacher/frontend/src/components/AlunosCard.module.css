@@ -1,0 +1,144 @@
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.detailsWrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.detailsOpen {
+  max-height: 500px; /* valor grande o suficiente */
+}
+
+.details p {
+  margin: 8px 0;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detailsButton {
+  flex: 1;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.detailsButton:hover {
+  background-color: #115293;
+}
+
+.editIcon {
+  margin-left: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toggleButton {
+  background-color: #3b82f6;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee; /* linha suave */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.foto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.deleteButton {
+  flex: 1;
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: #c62828;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between; /* um em cada lado */
+  align-items: center;
+  margin-top: 12px;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .toggleButton {
+    width: 28px;
+    height: 28px;
+    padding: 2px;
+    border-radius: 6px;
+  }
+
+  .toggleButton svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .header h3 {
+    font-size: 16px;
+  }
+
+  .detailsButton,
+  .deleteButton {
+    font-size: 14px;
+    padding: 6px 8px;
+  }
+}

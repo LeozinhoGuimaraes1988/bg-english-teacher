@@ -1,0 +1,187 @@
+/* AulasAgendadasPage.module.css */
+
+.container {
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+.confirmada {
+  background-color: #e0f7e9;
+  color: #2e7d32;
+}
+
+.pendente {
+  background-color: #fffde7;
+  color: #f57f17;
+}
+
+.cancelada {
+  background-color: #fdecea;
+  color: #c62828;
+}
+
+.concluída {
+  background-color: #e3f2fd;
+  color: #1e88e5;
+}
+
+button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.botoesAbaixoTabela {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.voltarDashboard {
+  background-color: #ef6c00;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+
+  cursor: pointer;
+}
+
+.verRealizadas {
+  background-color: #0288d1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verDetalhesBtn {
+  background-color: #1e88e5;
+  color: white;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.verDetalhesBtn:hover {
+  background-color: #1565c0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .botoesAbaixoTabela {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .voltarDashboard,
+  .verRealizadas {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    font-size: 0.85rem;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+
+  .status {
+    font-size: 0.8rem;
+    padding: 3px 8px;
+  }
+
+  button {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
+
+  .botoesAbaixoTabela {
+    gap: 8px;
+  }
+  @media (max-width: 480px) {
+    td button {
+      font-size: 0.75rem;
+      padding: 5px 8px;
+      margin: 2px 0;
+    }
+
+    .verDetalhesBtn {
+      padding: 5px 8px;
+      font-size: 0.75rem;
+    }
+  }
+}
