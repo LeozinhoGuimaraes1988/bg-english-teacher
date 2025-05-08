@@ -24,3 +24,9 @@ src/config/serviceAccountKey.json
 *.njsproj
 *.sln
 *.sw?
+
+# credenciais sensíveis
+backend/tokens.json
+backend/src/config/client_secret_*.json
+backend/src/config/credentials.json
+
