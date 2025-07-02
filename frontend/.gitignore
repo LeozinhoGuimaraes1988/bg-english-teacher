@@ -24,3 +24,7 @@ src/config/serviceAccountKey.json
 *.njsproj
 *.sln
 *.sw?
+
+# Credentials
+src/firebase/config.js
+

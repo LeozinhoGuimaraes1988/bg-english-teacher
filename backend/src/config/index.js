@@ -1,15 +1,11 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-console.log('🔍 GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID);
-console.log('🔍 PORT:', process.env.PORT);
 export const config = {
   server: {
-    port: process.env.PORT || 4000,
+    port: process.env.PORT || 3001,
     env: process.env.NODE_ENV || 'development',
   },
-
-  frontendUrl: process.env.FRONTEND_URL, // URL do frontend
 
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID,
