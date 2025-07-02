@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "bg-english-teacher"
+  },
+  "targets": {
+    "bg-english-teacher": {
+      "hosting": {
+        "staging": [
+          "bg-english-teacher"
+        ]
+      }
+    }
+  }
+}
