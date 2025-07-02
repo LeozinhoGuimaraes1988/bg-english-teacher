@@ -1,0 +1,120 @@
+{
+  "dashboard": {
+    "titulo": "Dashboard",
+    "totalAlunos": "Total Students",
+    "aulasAgendadas": "Scheduled Lessons",
+    "aulasRealizadas": "Completed Lessons",
+    "graficos": "Charts",
+    "verAlunos": "View Students",
+    "verAulas": "View Lessons",
+    "verGraficos": "View Charts",
+    "proximasAulas": "Upcoming Lessons",
+    "atividadesRecentes": "Recent Activities",
+    "novoCadastro": "New student registered: {{nome}}",
+    "aulaMarcada": "Lesson scheduled with {{aluno}} for {{data}}",
+    "pagamentoRecebido": "Payment received from {{nome}}"
+  },
+  "aulas": {
+    "tituloAgendadas": "Scheduled Lessons",
+    "aluno": "Student",
+    "data": "Date",
+    "horario": "Time",
+    "tipo": "Lesson Type",
+    "status": "Status",
+    "acoes": "Actions",
+    "editar": "Edit",
+    "detalhes": "Details",
+    "excluir": "Delete",
+    "salvar": "Save",
+    "cancelar": "Cancel",
+    "verRealizadas": "View Completed Lessons",
+    "voltarDashboard": "Back to Dashboard",
+    "confirmada": "Confirmed",
+    "pendente": "Pending",
+    "cancelada": "Canceled",
+    "concluida": "Completed",
+    "verDetalhes": "View Details"
+  },
+  "realizadas": {
+    "titulo": "Completed Lessons",
+    "totalAulas": "Total Lessons This Month",
+    "totalAlunos": "Total Students Attended",
+    "tempoTotal": "Total Time",
+    "filtros": {
+      "mes": "Filter by Month",
+      "aluno": "Filter by Student",
+      "tipo": "Filter by Type"
+    },
+    "duracao": "Duration",
+    "quantidade": "Quantity",
+    "observacoes": "Observations",
+    "status": "Status",
+    "exportar": "Export PDF/Excel",
+    "voltar": "Back to Dashboard"
+  },
+  "financeiro": {
+    "titulo": "Finance",
+    "totalRecebido": "Total Received This Month",
+    "alunosEmDia": "Up-to-date Students",
+    "pendentes": "Pending Payments",
+    "todos": "All",
+    "emDia": "Up to Date",
+    "aguardando": "Awaiting",
+    "aluno": "Student",
+    "numeroAulas": "Lesson Count",
+    "valorPacote": "Package Value",
+    "ultimoPagamento": "Last Payment",
+    "proximoPagamento": "Next Payment",
+    "status": "Status",
+    "acoes": "Actions",
+    "gerarRecibo": "Generate Receipt",
+    "resumo": "Financial Summary",
+    "previsao": "Forecast for Next Month",
+    "vencidos": "Overdue Payments",
+    "ticketMedio": "Average Ticket",
+    "voltar": "Back to Dashboard"
+  },
+  "configuracoes": {
+    "titulo": "General Settings",
+    "financeiro": "Finance",
+    "valorHora": "Hourly rate (R$)",
+    "salvar": "Save",
+    "diaPagamento": "Default payment day",
+    "aparencia": "Appearance",
+    "modoEscuro": "Enable dark mode",
+    "mensagemBoasVindas": "Custom welcome message",
+    "logo": "Custom logo (coming soon)",
+    "idioma": "Application language",
+    "frequencia": "Default lesson frequency",
+    "umaVez": "Once a week",
+    "duasVezes": "Twice a week",
+    "tresVezes": "Three times a week"
+  },
+  "home": {
+    "titulo": "Admin Area",
+    "logadoComo": "Logged in as:",
+    "sair": "Logout",
+    "bemVinda": "Welcome, {{nome}}",
+    "subtitulo": "Here you can manage the system. Choose one of the options below:",
+    "dashboard": {
+      "titulo": "Dashboard",
+      "descricao": "System overview",
+      "botao": "Access"
+    },
+    "alunos": {
+      "titulo": "Manage Students",
+      "descricao": "Add, edit or remove students.",
+      "botao": "Go to Students"
+    },
+    "calendario": {
+      "titulo": "Calendar",
+      "descricao": "Manage events and scheduled lessons.",
+      "botao": "Open Calendar"
+    },
+    "financeiro": {
+      "titulo": "Finance",
+      "descricao": "Manage payments and revenue.",
+      "botao": "Go to Finance"
+    }
+  }
+}
