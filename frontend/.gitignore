@@ -25,6 +25,10 @@ src/config/serviceAccountKey.json
 *.sln
 *.sw?
 
-# Credentials
-src/firebase/config.js
+# Firebase Configs
+frontend/src/firebase/config.js
+src/config/serviceAccountKey.json
+src/config/client_secret_*.json
+tokens.json
+**/client_secret_*.json
 
