@@ -19,39 +19,21 @@ router.get('/auth', (req, res) => {
 
 // Rota para callback do Google
 router.get('/callback', async (req, res) => {
-  console.log('🔹 Callback do Google chamado.');
-
   const { code } = req.query;
-
-  if (!code) {
-    console.error('❌ Código de autenticação ausente.');
-    return res.status(400).json({ error: 'Código de autenticação ausente.' });
-  }
-
-  console.log('🔍 Código recebido na rota:', code);
-
   try {
-    const tokens = await setCredentials(code);
+    const { tokens } = await setCredentials(code);
 
-    if (!tokens) {
-      console.error('❌ Erro: Tokens inválidos ou ausentes.', tokens);
-      return res.redirect(
-        `${config.frontendUrl}/dashboard?error=invalid_token`
-      );
-    }
-
-    console.log('✅ Tokens recebidos com sucesso:', tokens);
-
-    // Definir URL correta para o frontend
-    // const frontendUrl = config.frontendUrl || 'http://localhost:5173';
-
-    // Redirecionar para o frontend com o access_token
+    // Enviar tokens para o frontend
     res.redirect(
-      `${frontendUrl}/dashboard?access_token=${tokens.access_token}`
+      `${
+        config.server.env === 'production'
+          ? config.frontendUrl
+          : 'http://localhost:3000'
+      }/dashboard?access_token=${tokens.access_token}`
     );
   } catch (error) {
-    console.error('❌ Erro na autenticação:', error);
-    res.redirect(`${config.frontendUrl}/dashboard?error=authentication_failed`);
+    console.error('Erro na autenticação:', error);
+    res.redirect('http://localhost:3000/dashboard?error=authentication_failed');
   }
 });
 

@@ -1,3 +1,4 @@
+// import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AulasProvider } from './src/context/AulasContext';
 import { AlunosProvider } from './src/context/AlunosContext';

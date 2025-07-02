@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 // import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './Calendario.module.css';
+// import {
+//   createCalendarEvent,
+//   //updateCalendarEvent,
+//   deleteCalendarEvent,
+// } from '../../../backend/src/services/googleCalendarService.js';
 
 const Calendario = () => {
   const [aulas, setAulas] = useState([]);
@@ -148,7 +153,7 @@ const Calendario = () => {
   const handleAgendarAula = async () => {
     try {
       // Primeiro salva no backend
-      const response = await api.post('http://localhost:3001/api/aulas', {
+      const response = await api.post('http://localhost:3000/api/aulas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +172,7 @@ const Calendario = () => {
       const googleEvent = await createCalendarEvent(aula);
 
       // Atualiza a aula com o ID do evento do Google
-      await fetch(`http://localhost:3001/api/aulas/${aula.id}`, {
+      await fetch(`http://localhost:3000/api/aulas/${aula.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
