@@ -4,8 +4,9 @@ import { AulasProvider } from './src/context/AulasContext';
 import { AlunosProvider } from './src/context/AlunosContext';
 import { AulasRealizadasProvider } from './src/context/AulasRealizadasContext';
 import { AuthProvider } from './src/context/AuthContext'; // caso ainda não tenha incluído
+import { AgendamentosProvider } from './src/context/AgendamentosContext';
 
-import Dashboard from '../frontend/src/pages/Dashboard';
+// import Dashboard from '../frontend/src/pages/Dashboard';
 import Home from '../frontend/src/pages/Home';
 import Sidebar from '../frontend/src/components/Sidebar';
 import AgendamentoAula from '../frontend/src/components/AgendamentoAula';
@@ -28,28 +29,29 @@ function App() {
       <AlunosProvider>
         <AulasProvider>
           <AulasRealizadasProvider>
-            <BrowserRouter>
-              <div style={{ display: 'flex' }}>
-                <Sidebar />
-                <div
-                  style={{ marginLeft: '10px', flexGrow: 1, padding: '20px' }}
-                >
-                  <Routes>
-                    <Route path="/login" element={<Login />} />
+            <AgendamentosProvider>
+              <BrowserRouter>
+                <div style={{ display: 'flex' }}>
+                  <Sidebar />
+                  <div
+                    style={{ marginLeft: '10px', flexGrow: 1, padding: '20px' }}
+                  >
+                    <Routes>
+                      <Route path="/login" element={<Login />} />
 
-                    <Route
-                      path="/home"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <Home />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/home"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <Home />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
+                      {/* <Route
                       path="/dashboard"
                       element={
                         <ProtectedRoute>
@@ -59,68 +61,68 @@ function App() {
                           </>
                         </ProtectedRoute>
                       }
-                    />
+                    /> */}
 
-                    <Route
-                      path="/alunos"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <PerfilAluno />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/alunos"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <PerfilAluno />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/alunos/page"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <AlunosPage />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/alunos/page"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <AlunosPage />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/aulas-realizadas"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <AulasRealizadas />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/aulas-realizadas"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <AulasRealizadas />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/calendario"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <Calendario />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/aulas-agendadas"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <AulasAgendadasPage />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/agendamento"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <AgendamentoAula />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
-
+                      <Route
+                        path="/agendamento"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <AgendamentoAula />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
+                      {/* 
                     <Route
                       path="/aulas-agendadas"
                       element={
@@ -131,62 +133,63 @@ function App() {
                           </>
                         </ProtectedRoute>
                       }
-                    />
+                    /> */}
 
-                    <Route
-                      path="/financeiro"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <FinanceiroPage />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/financeiro"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <FinanceiroPage />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/alunos/:id"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <AlunoDetalhes />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/alunos/:id"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <AlunoDetalhes />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/graficos"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <Graficos />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/graficos"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <Graficos />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path="/configuracoes"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <ConfiguracoesPage />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    />
+                      <Route
+                        path="/configuracoes"
+                        element={
+                          <ProtectedRoute>
+                            <>
+                              <Navbar />
+                              <ConfiguracoesPage />
+                            </>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    {/* Rota padrão: redireciona para /home se logado */}
-                    <Route path="*" element={<Navigate to="/home" />} />
-                  </Routes>
+                      {/* Rota padrão: redireciona para /home se logado */}
+                      <Route path="*" element={<Navigate to="/home" />} />
+                    </Routes>
+                  </div>
                 </div>
-              </div>
-            </BrowserRouter>
+              </BrowserRouter>
+            </AgendamentosProvider>
           </AulasRealizadasProvider>
         </AulasProvider>
       </AlunosProvider>

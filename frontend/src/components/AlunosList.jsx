@@ -6,7 +6,6 @@ import AlunosCard from '../components/AlunosCard'; // certifique-se que o caminh
 
 const AlunosList = ({ alunos, onClose }) => {
   const { excluirAluno } = useAlunos();
-
   const [expandedId, setExpandedId] = useState(null);
 
   const handleToggle = (id) => {

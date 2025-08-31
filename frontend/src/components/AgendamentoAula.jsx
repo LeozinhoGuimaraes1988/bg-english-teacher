@@ -1,126 +1,211 @@
-import React, { useState, useEffect } from 'react';
-// import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calendar, Clock } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Trash2 } from 'lucide-react';
 import styles from './AgendamentoAula.module.css';
-// import apiClient from '../../../src/services/apiClient.js';
+import { useAlunos } from '../context/AlunosContext';
+import { useAgendamentos } from '../context/AgendamentosContext';
 
 const AgendamentoAula = () => {
-  const [alunos, setAlunos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const { alunos } = useAlunos();
+  const { agendamentos, adicionarAgendamento, excluirAgendamento } =
+    useAgendamentos();
 
-  const [formData, setFormData] = useState({
-    alunoId: '',
-    data: '',
-    horario: '',
-    recorrente: false,
-    observacoes: '',
+  const [selectedAlunoId, setSelectedAlunoId] = useState('');
+  const [alunosAdicionados, setAlunosAdicionados] = useState([]);
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dragOverCell, setDragOverCell] = useState(null);
+
+  const dragCounter = useRef(0);
+
+  const timeSlots = Array.from({ length: 13 }, (_, i) => {
+    const start = i + 8;
+    return `${start.toString().padStart(2, '0')}:00-${start + 1}:00`;
   });
 
-  useEffect(() => {
-    const fetchAlunos = async () => {
-      try {
-        const response = await apiClient.get('/alunos');
-        setAlunos(response.data);
-      } catch (err) {
-        const errorMessage =
-          err.response?.data.message || 'Erro ao carregar lista de alunos';
-        setError(errorMessage);
-      }
-    };
-    fetchAlunos();
-  }, []);
+  const days = [
+    { key: 'monday', label: 'Segunda' },
+    { key: 'tuesday', label: 'Terça' },
+    { key: 'wednesday', label: 'Quarta' },
+    { key: 'thursday', label: 'Quinta' },
+    { key: 'friday', label: 'Sexta' },
+    { key: 'saturday', label: 'Sábado' },
+    { key: 'sunday', label: 'Domingo' },
+  ];
 
-  // Função para validar os dados do formulário
-  const validadeForm = () => {
-    // Verificar se os campos estão preenchidos
-    if (!formData.alunoId) {
-      setError('Selecione um aluno');
-      return false;
-    }
-
-    if (!formData.data) {
-      setError('Selecione uma data');
-      return false;
-    }
-
-    if (!formData.horario) {
-      setError('Selecione um horário');
-      return false;
-    }
-    return true;
+  const gerarCorAleatoria = () => {
+    const cores = [
+      '#FFE0B2',
+      '#C8E6C9',
+      '#BBDEFB',
+      '#F8BBD0',
+      '#D1C4E9',
+      '#FFCCBC',
+    ];
+    return cores[Math.floor(Math.random() * cores.length)];
   };
 
-  //Função para envio do formulário
-  const handleSubmit = async (e) => {
+  // ---------------- DRAG & DROP ----------------
+  const handleDragStart = (e, item, from) => {
+    setDraggedItem({ ...item, from });
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+    setTimeout(() => e.target.classList.add(styles.dragging), 0);
+  };
+
+  const handleDragEnd = (e) => {
+    e.target.classList.remove(styles.dragging);
+    setDraggedItem(null);
+    setDragOverCell(null);
+    dragCounter.current = 0;
+  };
+
+  const handleDragOver = (e) => {
     e.preventDefault();
-    if (!validadeForm()) return; // Chama a validação antes de enviar
+    e.dataTransfer.dropEffect = 'move';
+  };
 
-    setLoading(true);
-    setError('');
-    setSuccess('');
+  const handleDragEnter = (e, day, time) => {
+    e.preventDefault();
+    dragCounter.current++;
+    setDragOverCell(`${day}-${time}`);
+  };
 
-    try {
-      await apiClient.post('/aulas', formData);
+  const handleDragLeave = () => {
+    dragCounter.current--;
+    if (dragCounter.current === 0) setDragOverCell(null);
+  };
 
-      setSuccess('Aula agendada com sucesso!');
-      setFormData({
-        alunoId: '',
-        data: '',
-        horario: '',
-        recorrente: false,
-        observacoes: '',
-      });
-    } catch (err) {
-      setError(err.response?.data?.message || 'Erro ao agendar aula.');
-    } finally {
-      setLoading(false);
+  const handleDrop = async (e, day, time) => {
+    e.preventDefault();
+    dragCounter.current = 0;
+    setDragOverCell(null);
+
+    if (!draggedItem) return;
+
+    // 🔹 Impede duplicar se já existe o mesmo aluno no mesmo horário
+    const conflito = agendamentos.find(
+      (c) =>
+        c.day === day &&
+        c.time === time &&
+        c.alunoId === (draggedItem.alunoId || draggedItem.id)
+    );
+    if (conflito) return;
+
+    // ✅ Caso 1: mover agendamento existente → remove anterior
+    if (draggedItem.from === 'agenda') {
+      const agendamentoExistente = agendamentos.find(
+        (c) =>
+          c.alunoId === (draggedItem.alunoId || draggedItem.id) &&
+          c.id === draggedItem.id // garante que é o mesmo agendamento
+      );
+      if (agendamentoExistente) {
+        await excluirAgendamento(agendamentoExistente.id);
+      }
+    }
+
+    // ✅ Caso 2: arraste vindo da lista → adiciona novo horário
+    const novoItem = {
+      alunoId: draggedItem.alunoId || draggedItem.id,
+      nome: draggedItem.nome,
+      day,
+      time,
+      cor: draggedItem.cor || gerarCorAleatoria(),
+    };
+
+    await adicionarAgendamento(novoItem);
+  };
+
+  // ---------------- ALUNOS DISPONÍVEIS ----------------
+  const handleSelectAluno = (e) => {
+    setSelectedAlunoId(e.target.value);
+  };
+
+  const handleAdicionarAluno = () => {
+    const aluno = alunos.find((a) => a.id === selectedAlunoId);
+    if (aluno && !alunosAdicionados.find((a) => a.id === aluno.id)) {
+      setAlunosAdicionados((prev) => [...prev, aluno]);
     }
   };
 
-  useEffect(() => {
-    if (error || success) {
-      const timeout = setTimeout(() => {
-        setError('');
-        setSuccess('');
-      }, 5000);
-      return () => clearTimeout(timeout);
-    }
-  }, [error, success]);
+  const removerAluno = (id) => {
+    setAlunosAdicionados((prev) => prev.filter((a) => a.id !== id));
+  };
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+  // ---------------- REMOVER AGENDAMENTO ----------------
+  const handleRemoveClass = async (id) => {
+    await excluirAgendamento(id);
+  };
+
+  const getClassForSlot = (day, time) => {
+    return agendamentos.find((cls) => cls.day === day && cls.time === time);
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Agendar Nova Aula</h2>
-      {/* 
-      {error && (
-        <Alert variant="destructive" className={styles.alertError}>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      <div className={styles.header}>
+        <h3 className={styles.title}>Cronograma Semanal Interativo</h3>
+      </div>
 
-      {success && (
-        <Alert className={styles.alertSuccess}>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )} */}
+      <div className={styles.scheduleGrid}>
+        <div className={styles.timeSlot}></div>
+        {days.map((day) => (
+          <div key={day.key} className={styles.dayHeader}>
+            {day.label}
+          </div>
+        ))}
 
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div>
-          <label className={styles.label}>Aluno</label>
+        {timeSlots.map((time) => (
+          <React.Fragment key={time}>
+            <div className={styles.timeSlot}>{time}</div>
+            {days.map((day) => {
+              const classItem = getClassForSlot(day.key, time);
+              const cellKey = `${day.key}-${time}`;
+              const isDragOver = dragOverCell === cellKey;
+
+              return (
+                <div
+                  key={cellKey}
+                  className={`${styles.scheduleCell} ${
+                    isDragOver ? styles.dragOver : ''
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragEnter={(e) => handleDragEnter(e, day.key, time)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, day.key, time)}
+                >
+                  {classItem && (
+                    <div
+                      className={styles.classItem}
+                      style={{ backgroundColor: classItem.cor || '#eee' }}
+                      draggable
+                      onDragStart={(e) =>
+                        handleDragStart(e, classItem, 'agenda')
+                      }
+                      onDragEnd={handleDragEnd}
+                    >
+                      <div className={styles.classActions}>
+                        <button
+                          className={styles.actionButton}
+                          onClick={() => handleRemoveClass(classItem.id)}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                      <strong>{classItem.nome}</strong>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <div className={styles.availableClasses}>
+        <h4 className={styles.availableTitle}>Alunos Disponíveis</h4>
+        <div className={styles.selectWrapper}>
           <select
-            name="alunoId"
-            value={formData.alunoId}
-            onChange={handleChange}
-            required
+            value={selectedAlunoId}
+            onChange={handleSelectAluno}
             className={styles.select}
           >
             <option value="">Selecione um aluno</option>
@@ -130,81 +215,45 @@ const AgendamentoAula = () => {
               </option>
             ))}
           </select>
-        </div>
-
-        <div className={styles.grid}>
-          <div>
-            <label className={styles.label}>Data</label>
-            <div className={styles.inputWrapper}>
-              <input
-                type="date"
-                name="data"
-                value={formData.data}
-                onChange={handleChange}
-                required
-                min={new Date().toISOString().split('T')[0]}
-                className={styles.input}
-              />
-              <Calendar className={styles.inputIcon} />
-            </div>
-          </div>
-
-          <div>
-            <label className={styles.label}>Horário</label>
-            <div className={styles.inputWrapper}>
-              <input
-                type="time"
-                name="horario"
-                value={formData.horario}
-                onChange={handleChange}
-                required
-                className={styles.input}
-              />
-              <Clock className={styles.inputIcon} />
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <label className={styles.checkboxWrapper}>
-            <input
-              type="checkbox"
-              name="recorrente"
-              checked={formData.recorrente}
-              onChange={handleChange}
-              className={styles.checkbox}
-            />
-            <span className={styles.checkboxLabel}>
-              Aula recorrente (semanalmente)
-            </span>
-          </label>
-        </div>
-
-        <div>
-          <label className={styles.label}>Observações</label>
-          <textarea
-            name="observacoes"
-            value={formData.observacoes}
-            onChange={handleChange}
-            rows={3}
-            placeholder="Adicione detalhes adicionais sobre a aula (opcional)"
-            className={styles.textarea}
-          />
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            disabled={loading}
-            className={`${styles.button} ${
-              loading ? styles.buttonDisabled : ''
-            }`}
-          >
-            {loading ? 'Agendando...' : 'Agendar Aula'}
+          <button onClick={handleAdicionarAluno} className={styles.addButton}>
+            Adicionar
           </button>
         </div>
-      </form>
+
+        <div className={styles.availableGrid}>
+          {alunosAdicionados.map((aluno) => (
+            <div
+              key={aluno.id}
+              className={styles.alunoItem}
+              draggable
+              onDragStart={(e) =>
+                handleDragStart(
+                  e,
+                  {
+                    ...aluno,
+                    tipo: 'aluno',
+                    cor: gerarCorAleatoria(),
+                  },
+                  'lista'
+                )
+              }
+              onDragEnd={handleDragEnd}
+            >
+              <div className={styles.alunoAvatar}>{aluno.nome.charAt(0)}</div>
+              <p className={styles.alunoNome}>{aluno.nome}</p>
+              <button
+                className={styles.iconBtn}
+                onClick={() => removerAluno(aluno.id)}
+                title="Remover aluno"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
+
 export default AgendamentoAula;

@@ -1,4 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  (window.location.hostname.includes('web.app') ||
+  window.location.hostname.includes('firebaseapp.com')
+    ? 'https://us-central1-bg-english-teacher.cloudfunctions.net/api'
+    : 'http://localhost:4001/api');
 
 // ALUNOS
 export async function getAlunos() {

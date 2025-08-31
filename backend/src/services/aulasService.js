@@ -1,18 +1,9 @@
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
 import { db } from './firebase.js';
 
 // Criar aula
-
 export const createAula = async (aulaData) => {
   try {
-    const docRef = await addDoc(collection(db, 'aulas'), aulaData);
+    const docRef = await db.collection('aulas').add(aulaData);
     return { id: docRef.id, ...aulaData };
   } catch (error) {
     console.error('Erro ao criar aula:', error);
@@ -23,8 +14,8 @@ export const createAula = async (aulaData) => {
 // Listar todas as aulas
 export const getAulas = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'aulas'));
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const snapshot = await db.collection('aulas').get();
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Erro ao buscar aulas:', error);
     throw new Error('Erro ao buscar aulas');
@@ -34,8 +25,7 @@ export const getAulas = async () => {
 // Atualizar aula
 export const updateAula = async (aulaId, aulaData) => {
   try {
-    const aulaRef = doc(db, 'aulas', aulaId);
-    await updateDoc(aulaRef, aulaData);
+    await db.collection('aulas').doc(aulaId).update(aulaData);
     return { id: aulaId, ...aulaData };
   } catch (error) {
     console.error('Erro ao atualizar aula:', error);
@@ -46,7 +36,7 @@ export const updateAula = async (aulaId, aulaData) => {
 // Excluir aula
 export const deleteAula = async (aulaId) => {
   try {
-    await deleteDoc(doc(db, 'aulas', aulaId));
+    await db.collection('aulas').doc(aulaId).delete();
   } catch (error) {
     console.error('Erro ao excluir aula:', error);
     throw new Error('Erro ao excluir aula');

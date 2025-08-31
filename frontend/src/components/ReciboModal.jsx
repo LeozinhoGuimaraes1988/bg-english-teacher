@@ -55,7 +55,7 @@ const ReciboModal = ({ aluno, onClose }) => {
               <p>CURSO DE INGLÊS ONLINE</p>
             </div>
             <div className={styles.numeracao}>
-              <p>Nº {aluno.id}</p>
+              {/* <p>Nº {aluno.id}</p> */}
               <p>VALOR: {valor}</p>
             </div>
           </div>

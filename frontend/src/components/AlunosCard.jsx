@@ -22,7 +22,7 @@ const AlunosCard = ({ aluno, expanded, onToggle, onDelete }) => {
   return (
     <div>
       <div className={styles.header}>
-        <img src={aluno.foto} alt={aluno.nome} className={styles.avatar} />
+        {/* <img src={aluno.foto} alt={aluno.nome} className={styles.avatar} /> */}
         <h3>{aluno.nome}</h3>
         <button className={styles.toggleButton} onClick={onToggle}>
           {expanded ? <ChevronUp /> : <ChevronDown />}
@@ -36,15 +36,15 @@ const AlunosCard = ({ aluno, expanded, onToggle, onDelete }) => {
           }`}
         >
           <div className={styles.details}>
-            <div className={styles.detailRow}>
+            {/* <div className={styles.detailRow}>
               <strong>Data de Nascimento:</strong> {aluno.nascimento}
-              {/* <Edit className={styles.editIcon} /> */}
+              <Edit className={styles.editIcon} />
             </div>
 
             <div className={styles.detailRow}>
               <strong>Idade:</strong> {aluno.idade} anos
-              {/* <Edit className={styles.editIcon} /> */}
-            </div>
+              <Edit className={styles.editIcon} />
+            </div> */}
 
             <div className={styles.detailRow}>
               <strong>Email:</strong> {aluno.email}
@@ -56,10 +56,10 @@ const AlunosCard = ({ aluno, expanded, onToggle, onDelete }) => {
               {/* <Edit className={styles.editIcon} /> */}
             </div>
 
-            <div className={styles.detailRow}>
+            {/* <div className={styles.detailRow}>
               <strong>Endereço:</strong> {aluno.endereco}
-              {/* <Edit className={styles.editIcon} /> */}
-            </div>
+              <Edit className={styles.editIcon} />
+            </div> */}
 
             <div className={styles.buttonGroup}>
               <Link to={`/alunos/${aluno.id}`}>

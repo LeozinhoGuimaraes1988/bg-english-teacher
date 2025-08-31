@@ -1,189 +1,472 @@
-/* ModalAula.module.css */
-.overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
 }
 
-.modal {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
-  width: 480px;
-  max-width: 95%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+.modalContainer {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 64rem;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: white;
+  border-radius: 1rem 1rem 0 0;
 }
 
-h2 {
-  margin-bottom: 24px;
-  text-align: center;
-  font-size: 24px;
-  color: #333;
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.formGroup {
+.closeButton {
+  color: rgba(255, 255, 255, 0.8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.modalContent {
+  padding: 1.5rem;
+}
+
+.form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  gap: 2rem;
 }
 
-.formGroup label {
-  margin-bottom: 6px;
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeader {
+  font-size: 1.125rem;
   font-weight: 600;
-  color: #333;
+  color: #111827;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.formGroup input,
-.formGroup select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
+.sectionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #16a34a;
 }
 
-.formGroup input:focus,
-.formGroup select:focus {
-  border-color: #007bff;
+.gridContainer {
+  display: grid;
+  gap: 1rem;
+}
+
+.gridTwoColumns {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.gridThreeColumns {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.input,
+.select {
+  align-items: center;
+  width: 90%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: white;
+}
+
+.input:focus,
+.select:focus {
   outline: none;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
-.formRow {
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.scheduleSection {
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.daySelector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.dayOption {
   display: flex;
-  gap: 12px;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.saveButton {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.saveButton:hover {
-  background-color: #0056b3;
+.dayOption:hover {
+  border-color: #16a34a;
+  background-color: #f0fdf4;
+}
+
+.dayOption.selected {
+  border-color: #16a34a;
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.dayCheckbox {
+  accent-color: #16a34a;
+}
+
+.timeInputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.timeLabel {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.studentsSection {
+  background-color: #fefefe;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.studentsHeader {
+  background-color: #f9fafb;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: between;
+}
+
+.studentsTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectedCount {
+  background-color: #16a34a;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.searchContainer {
+  position: relative;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 2.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: #9ca3af;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.studentsList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.studentItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.studentItem:last-child {
+  border-bottom: none;
+}
+
+.studentItem:hover {
+  background-color: #f9fafb;
+}
+
+.studentItem.selected {
+  background-color: #f0fdf4;
+  border-left: 4px solid #16a34a;
+}
+
+.studentCheckbox {
+  accent-color: #16a34a;
+  width: 1rem;
+  height: 1rem;
+}
+
+.studentAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.studentInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.studentName {
+  text-align: left;
+
+  font-weight: 500;
+  color: #1e293b;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.studentDetails {
+  text-align: left;
+  color: #64748b;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.studentLevel {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.emptyState {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.selectedStudentsPreview {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.previewTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #166534;
+  margin: 0 0 0.5rem 0;
+}
+
+.previewList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.previewTag {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.removeTag {
+  background: none;
+  border: none;
+  color: #166534;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.removeTag:hover {
+  background-color: rgba(22, 163, 74, 0.2);
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1.5rem;
 }
 
 .cancelButton {
-  background-color: #dc3545;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  color: #374151;
+  background-color: white;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 .cancelButton:hover {
-  background-color: #c82333;
+  background-color: #f9fafb;
 }
 
-/* Responsividade */
-@media (max-width: 600px) {
-  .modal {
-    width: 90%;
-    padding: 20px;
-    border-radius: 12px;
-  }
-
-  .formRow {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .saveButton,
-  .cancelButton {
-    width: 100%;
-    font-size: 1rem;
-  }
+.createButton {
+  padding: 0.75rem 1.5rem;
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
-/* Responsividade */
+
+.createButton:hover {
+  background-color: #15803d;
+}
+
+.createButton:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .modal {
-    width: 90%;
-    padding: 20px;
-    border-radius: 12px;
+  .gridTwoColumns,
+  .gridThreeColumns {
+    grid-template-columns: 1fr;
   }
 
-  .formRow {
+  .daySelector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .timeInputs {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .modalContainer {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .previewList {
     flex-direction: column;
-    gap: 10px;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: 10px;
-    align-items: stretch;
-  }
-
-  .saveButton,
-  .cancelButton {
-    width: 100%;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal {
-    width: 80%;
-    padding: 15px;
-    border-radius: 10px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  .formGroup label {
-    font-size: 14px;
-  }
-
-  .formGroup input,
-  .formGroup select {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .saveButton,
-  .cancelButton {
-    font-size: 0.9rem;
-    padding: 8px;
   }
 }

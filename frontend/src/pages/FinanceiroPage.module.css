@@ -9,6 +9,18 @@ h1 {
   margin-bottom: 20px;
 }
 
+input {
+  font-family: inherit;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.inputAulas {
+  width: 30px;
+  margin-right: 5px;
+}
+
 .resumoSuperior {
   display: flex;
   justify-content: space-between;
@@ -58,6 +70,13 @@ h1 {
   font-weight: bold;
 }
 
+.selectStatus {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+}
+
 .emDia {
   color: green;
 }
@@ -75,9 +94,9 @@ h1 {
   cursor: pointer;
 }
 
-.marcarBtn:hover {
+/* .marcarBtn:hover {
   background-color: #357ac7;
-}
+} */
 
 .exportarBtn,
 .voltarBtn {
@@ -148,6 +167,23 @@ h1 {
 
 .year {
   margin-left: 5px;
+}
+
+.btnIcon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e90ff; /* azul padrão, pode ajustar */
+  transition: color 0.2s ease;
+}
+
+.btnIcon:hover {
+  background: transparent !important; /* remove o fundo herdado */
+  color: #0056b3;
 }
 
 /* RESPONSIVIDADE */

@@ -1,4 +1,4 @@
-.container {
+/* .container {
   background-color: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
@@ -167,4 +167,455 @@
 
 .buttonDisabled:hover {
   background-color: #6366f1;
+} */
+
+.container {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.addClassButton {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.addClassButton:hover {
+  background-color: #1d4ed8;
+}
+
+.scheduleIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+}
+
+.scheduleGrid {
+  display: grid;
+  grid-template-columns: 100px repeat(7, 1fr);
+  gap: 1px;
+  background-color: #e5e7eb;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.timeSlot {
+  background-color: #f9fafb;
+  padding: 1rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e5e7eb;
+}
+
+.dayHeader {
+  background-color: #f3f4f6;
+  padding: 1rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.scheduleCell {
+  background-color: white;
+  min-height: 80px;
+  padding: 0.5rem;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.scheduleCell:hover {
+  background-color: #f9fafb;
+}
+
+.scheduleCell.dragOver {
+  background-color: #dbeafe;
+  border: 2px dashed #3b82f6;
+}
+
+.classItem {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: move;
+  user-select: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.classItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.classItem.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+}
+
+.classItem.intermediate {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.classItem.advanced {
+  background: linear-gradient(135deg, #ea580c, #dc2626);
+}
+
+.classItem.ielts {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
+
+.className {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.2;
+}
+
+.classDetails {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.classActions {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.classItem:hover .classActions {
+  opacity: 1;
+}
+
+.actionButton {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.actionIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.availableClasses {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.availableTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.availableGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.availableClass {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  color: #374151;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: move;
+  user-select: none;
+  border: 2px dashed #d1d5db;
+  transition: all 0.2s ease;
+}
+
+.availableClass:hover {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  transform: translateY(-2px);
+}
+
+.availableClass.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+}
+
+.availableStudent {
+  border: 1px dashed #999;
+  background-color: #f5f5f5;
+  padding: 8px;
+  margin: 4px;
+  border-radius: 6px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+}
+
+.studentAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #dcdcdc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.studentSelectArea {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.studentLine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addButton {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.emptyState {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.legendColor {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+}
+
+.legendColor.basic {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.legendColor.intermediate {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.legendColor.advanced {
+  background: linear-gradient(135deg, #ea580c, #dc2626);
+}
+
+.legendColor.ielts {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
+
+.selectWrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #111827;
+  font-size: 0.875rem;
+  font-weight: 500;
+  appearance: none;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px #bfdbfe;
+}
+
+.alunoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border: 2px dashed #cbd5e1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: grab;
+  gap: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.alunoItem:hover {
+  transform: scale(1.01);
+}
+
+.alunoAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.alunoNome {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.iconBtn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.iconBtn:hover {
+  color: #b91c1c;
+}
+
+/* Ajuste nos agendamentos para mostrar botão de lixeira */
+.classActions button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.classActions button:hover {
+  color: #f87171;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .scheduleGrid {
+    grid-template-columns: 80px repeat(7, 1fr);
+    font-size: 0.75rem;
+  }
+
+  .timeSlot,
+  .dayHeader {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .scheduleCell {
+    min-height: 60px;
+    padding: 0.25rem;
+  }
+
+  .classItem {
+    padding: 0.5rem;
+  }
+
+  .className {
+    font-size: 0.75rem;
+  }
+
+  .classDetails {
+    font-size: 0.625rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .scheduleGrid {
+    grid-template-columns: 60px repeat(7, 1fr);
+    gap: 0;
+  }
+
+  .availableGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .legend {
+    justify-content: center;
+  }
 }

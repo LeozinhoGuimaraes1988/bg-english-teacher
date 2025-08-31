@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Home,
+  Banknote,
   LayoutDashboard,
   Users,
-  Calendar,
+  BookOpen,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -18,6 +18,8 @@ const Sidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isVisible, setIsVisible] = useState(window.innerWidth > 768);
 
+  const sidebarRef = useRef(null);
+
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
@@ -28,6 +30,22 @@ const Sidebar = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Fecha a Sidebar ao clicar fora dela
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        isExpanded
+      ) {
+        setIsExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isExpanded]);
 
   return (
     <>
@@ -42,6 +60,7 @@ const Sidebar = () => {
 
       {isVisible && (
         <div
+          ref={sidebarRef}
           className={`${styles.sidebar} ${
             isExpanded
               ? styles.expanded
@@ -65,11 +84,6 @@ const Sidebar = () => {
 
           <nav className={styles.nav}>
             <Link to="/home" className={styles.navItem}>
-              <Home size={20} />
-              {(isExpanded || isHovered) && <span>Home</span>}
-            </Link>
-
-            <Link to="/dashboard" className={styles.navItem}>
               <LayoutDashboard size={20} />
               {(isExpanded || isHovered) && <span>Dashboard</span>}
             </Link>
@@ -79,9 +93,13 @@ const Sidebar = () => {
               {(isExpanded || isHovered) && <span>Alunos</span>}
             </Link>
 
-            <Link to="/calendario" className={styles.navItem}>
-              <Calendar size={20} />
-              {(isExpanded || isHovered) && <span>Calendário</span>}
+            <Link to="/agendamento" className={styles.navItem}>
+              <BookOpen size={20} />
+              {(isExpanded || isHovered) && <span>Aulas</span>}
+            </Link>
+            <Link to="/financeiro" className={styles.navItem}>
+              <Banknote size={20} />
+              {(isExpanded || isHovered) && <span>Financeiro</span>}
             </Link>
 
             <Link to="/configuracoes" className={styles.navItem}>

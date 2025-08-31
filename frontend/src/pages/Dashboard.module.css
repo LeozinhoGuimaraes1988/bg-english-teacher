@@ -1,4 +1,4 @@
-.container {
+/* .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -90,7 +90,7 @@
   background-color: #1d4ed8;
 }
 
-/* SEÇÕES E LISTAS */
+
 
 .section {
   margin-top: 30px;
@@ -163,7 +163,7 @@
   background: #0c4a6e;
 }
 
-/* RESPONSIVIDADE */
+
 
 @media (max-width: 992px) {
   .grid {
@@ -281,4 +281,4 @@
     padding: 0.5rem;
     border-radius: 6px;
   }
-}
+} */

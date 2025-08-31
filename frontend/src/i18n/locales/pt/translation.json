@@ -98,10 +98,10 @@
   },
 
   "home": {
-    "titulo": "Área Administrativa",
+    "titulo": "Dashboard",
     "logadoComo": "Logado como:",
     "sair": "Sair",
-    "bemVinda": "Bem-vinda, {{nome}}",
+    "bemVinda": "Bem-vindo (a), {{nome}}",
     "subtitulo": "Aqui você pode gerenciar o sistema. Escolha uma das opções abaixo:",
     "dashboard": {
       "titulo": "Dashboard",

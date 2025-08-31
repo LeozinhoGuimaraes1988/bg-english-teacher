@@ -3,37 +3,25 @@ import { useParams, Link } from 'react-router-dom';
 import styles from './AlunoDetalhes.module.css';
 import { useAlunos } from '../context/AlunosContext';
 import { useConfiguracoes } from '../context/ConfiguracoesContext';
-import { parseData, formatarDataParaExibicao } from '../utils/dataUtils';
-import { uploadImagem } from '../utils/uploadImagem';
+// import { parseData, formatarDataParaExibicao } from '../utils/dataUtils';
+// import { uploadImagem } from '../utils/uploadImagem';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-const calcularIdade = (nascimento) => {
-  if (!nascimento) return '';
-  const [ano, mes, dia] = nascimento.split('-');
-  const data = new Date(ano, mes - 1, dia);
-  const hoje = new Date();
-  let idade = hoje.getFullYear() - data.getFullYear();
-  const m = hoje.getMonth() - data.getMonth();
-  if (m < 0 || (m === 0 && hoje.getDate() < data.getDate())) idade--;
-  return idade;
-};
 
 const AlunoDetalhes = () => {
   const { id } = useParams();
   const { alunos, atualizarAluno } = useAlunos();
   const { valorHoraAula } = useConfiguracoes();
   const { t } = useTranslation();
-
   const [aluno, setAluno] = useState(null);
 
   // Campos editáveis
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [nascimento, setNascimento] = useState('');
+  // const [nome, setNome] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [telefone, setTelefone] = useState('');
+  // const [nascimento, setNascimento] = useState('');
 
   const [nivel, setNivel] = useState('');
   const [pacoteAulas, setPacoteAulas] = useState('');
@@ -41,17 +29,17 @@ const AlunoDetalhes = () => {
   const [valorPacote, setValorPacote] = useState('');
   const [diasSemana, setDiasSemana] = useState([]);
   const [horarioAula, setHorarioAula] = useState('');
-  const [preview, setPreview] = useState(null);
-  const [foto, setFoto] = useState(null);
+  // const [preview, setPreview] = useState(null);
+  // const [foto, setFoto] = useState(null);
 
-  const diasDaSemana = [
-    'Segunda-feira',
-    'Terça-feira',
-    'Quarta-feira',
-    'Quinta-feira',
-    'Sexta-feira',
-    'Sábado',
-  ];
+  // const diasDaSemana = [
+  //   'Segunda-feira',
+  //   'Terça-feira',
+  //   'Quarta-feira',
+  //   'Quinta-feira',
+  //   'Sexta-feira',
+  //   'Sábado',
+  // ];
 
   const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
@@ -61,7 +49,8 @@ const AlunoDetalhes = () => {
     telefone: Yup.string()
       .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/, 'Telefone inválido')
       .required('O telefone é obrigatório'),
-    nascimento: Yup.string().required('A data de nascimento é obrigatória'),
+    endereco: Yup.string().optional(),
+    // nascimento: Yup.string().required('A data de nascimento é obrigatória'),
   });
 
   const {
@@ -82,78 +71,79 @@ const AlunoDetalhes = () => {
         email: encontrado.email || '',
         telefone: encontrado.telefone || '',
         nascimento: encontrado.nascimento || '',
+        endereco: encontrado.endereco || '',
       });
 
       // demais setStates
       setNivel(encontrado.nivel || '');
-      setPacoteAulas(encontrado.pacoteAulas || '');
+      // setPacoteAulas(encontrado.pacoteAulas || '');
       setObservacoes(encontrado.notas || '');
-      setDiasSemana(encontrado.diasSemana || []);
-      setHorarioAula(encontrado.horarioAula || '');
+      // setDiasSemana(encontrado.diasSemana || []);
+      // setHorarioAula(encontrado.horarioAula || '');
     }
   }, [alunos, id, reset]);
 
-  useEffect(() => {
-    if (valorHoraAula && pacoteAulas) {
-      setValorPacote(Number(pacoteAulas) * Number(valorHoraAula));
-    }
-  }, [pacoteAulas, valorHoraAula]);
+  // useEffect(() => {
+  //   if (valorHoraAula && pacoteAulas) {
+  //     setValorPacote(Number(pacoteAulas) * Number(valorHoraAula));
+  //   }
+  // }, [pacoteAulas, valorHoraAula]);
 
   if (!aluno) return <p className={styles.loading}>Carregando aluno...</p>;
 
-  const idade = calcularIdade(nascimento);
+  // const idade = calcularIdade(nascimento);
 
   const campoAlterado = (campoOriginal, valorAtual) =>
     aluno[campoOriginal] !== valorAtual;
 
   const handleSalvar = handleSubmit(async (dadosValidados) => {
-    let fotoUrl = aluno.foto || null;
-    if (foto && typeof foto !== 'string') {
-      fotoUrl = await uploadImagem(foto, aluno.id);
-    }
+    // let fotoUrl = aluno.foto || null;
+    // if (foto && typeof foto !== 'string') {
+    //   fotoUrl = await uploadImagem(foto, aluno.id);
+    // }
 
     const dadosAtualizados = {
       ...aluno,
-      ...dadosValidados, // aqui vem nome, email, telefone, nascimento
+      ...dadosValidados, // aqui vem nome, email, telefone, endereco
       nivel,
       pacoteAulas,
       valorPacote,
       diasSemana,
       horarioAula,
       notas: observacoes,
-      foto: fotoUrl,
+      // foto: fotoUrl,
     };
 
     await atualizarAluno(aluno.id, dadosAtualizados);
     alert('Alterações salvas com sucesso!');
   });
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFoto(file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setFoto(file);
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => setPreview(reader.result);
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const handlePacoteChange = (e) => {
-    const pacote = e.target.value;
-    setPacoteAulas(pacote);
-    if (valorHoraAula && pacote) {
-      setValorPacote(Number(pacote) * Number(valorHoraAula));
-    } else {
-      setValorPacote('');
-    }
-  };
+  // const handlePacoteChange = (e) => {
+  //   const pacote = e.target.value;
+  //   setPacoteAulas(pacote);
+  //   if (valorHoraAula && pacote) {
+  //     setValorPacote(Number(pacote) * Number(valorHoraAula));
+  //   } else {
+  //     setValorPacote('');
+  //   }
+  // };
 
   return (
     <div className={styles.container}>
       <h1>Detalhes do Aluno</h1>
 
       <div className={styles.card}>
-        <div className={styles.left}>
+        {/* <div className={styles.left}>
           <div className={styles.fotoPreview}>
             {preview || aluno.foto ? (
               <img src={preview || aluno.foto} alt="Foto do aluno" />
@@ -162,7 +152,7 @@ const AlunoDetalhes = () => {
             )}
           </div>
           <input type="file" accept="image/*" onChange={handleFileChange} />
-        </div>
+        </div> */}
 
         <div className={styles.info}>
           <div className={styles.inputGroup}>
@@ -216,6 +206,24 @@ const AlunoDetalhes = () => {
 
           <div className={styles.inputGroup}>
             <label>
+              <strong>Endereço:</strong>
+            </label>
+            <input
+              type="text"
+              {...register('endereco')}
+              className={`${
+                campoAlterado('endereco', aluno?.endereco)
+                  ? styles.highlight
+                  : ''
+              }`}
+            />
+            {errors.endereco && (
+              <p className={styles.error}>{errors.endereco.message}</p>
+            )}
+          </div>
+
+          {/* <div className={styles.inputGroup}>
+            <label>
               <strong>Data de nascimento:</strong>
             </label>
             <input
@@ -230,11 +238,11 @@ const AlunoDetalhes = () => {
             {errors.nascimento && (
               <p className={styles.error}>{errors.nascimento.message}</p>
             )}
-          </div>
+          </div> */}
 
-          <p>
+          {/* <p>
             <strong>Idade:</strong> {idade} anos
-          </p>
+          </p> */}
 
           <div className={styles.inputGroup}>
             <label>
@@ -248,7 +256,7 @@ const AlunoDetalhes = () => {
             </select>
           </div>
 
-          <div className={styles.inputGroup}>
+          {/* <div className={styles.inputGroup}>
             <label>
               <strong>Pacote de aulas:</strong>
             </label>
@@ -264,9 +272,9 @@ const AlunoDetalhes = () => {
 
           <p>
             <strong>Valor do Pacote:</strong> R$ {valorPacote}
-          </p>
+          </p> */}
 
-          <div className={styles.inputGroup}>
+          {/* <div className={styles.inputGroup}>
             <label>
               <strong>Dias das Aulas:</strong>
             </label>
@@ -288,8 +296,8 @@ const AlunoDetalhes = () => {
                 </label>
               ))}
             </div>
-          </div>
-
+          </div> */}
+          {/* 
           <div className={styles.inputGroup}>
             <label>
               <strong>Horário da Aula:</strong>
@@ -299,7 +307,7 @@ const AlunoDetalhes = () => {
               value={horarioAula}
               onChange={(e) => setHorarioAula(e.target.value)}
             />
-          </div>
+          </div> */}
 
           <div className={styles.inputGroupFull}>
             <label>

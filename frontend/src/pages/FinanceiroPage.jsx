@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useAlunos } from '../context/AlunosContext';
 import { useTranslation } from 'react-i18next';
 import { useConfiguracoes } from '../context/ConfiguracoesContext';
+import { Edit, Check, X } from 'lucide-react';
 import {
   parseData,
   adicionarDias,
@@ -41,10 +42,12 @@ const FinanceiroPage = () => {
   const [anoSelecionado, setAnoSelecionado] = useState(anoAtual);
   const mesQueVem = (mesAtual + 1) % 12;
   const anoProxMes = mesAtual === 11 ? anoAtual + 1 : anoAtual;
+  const [editandoId, setEditandoId] = useState(null);
+  const [dadosEditados, setDadosEditados] = useState({});
 
-  const alunosFiltrados = alunos.filter((aluno) =>
-    filtroStatus === 'Todos' ? true : aluno.status === filtroStatus
-  );
+  // const alunosFiltrados = alunos.filter((aluno) =>
+  //   filtroStatus === 'Todos' ? true : aluno.status === filtroStatus
+  // );
 
   const abrirModalRecibo = (aluno) => {
     setReciboAluno(aluno);
@@ -67,11 +70,17 @@ const FinanceiroPage = () => {
   };
 
   const calcularValorPacote = (aluno) => {
+    if (aluno.valorPersonalizadoTotal) {
+      return Number(aluno.valorPersonalizadoTotal).toFixed(2);
+    }
+
     const aulas = Number(aluno.pacoteAulas);
     const valor = Number(valorHoraAula);
+
     if (!isNaN(aulas) && !isNaN(valor)) {
       return (aulas * valor).toFixed(2);
     }
+
     return '0.00';
   };
 
@@ -99,10 +108,10 @@ const FinanceiroPage = () => {
     })
     .reduce((total, a) => total + parseFloat(calcularValorPacote(a)), 0);
 
-  const vencidos = alunos.filter((a) => {
-    const d = parseData(a.proximoPagamento);
-    return a.status !== 'Em dia' && d && d < hoje;
-  });
+  // const vencidos = alunos.filter((a) => {
+  //   const d = parseData(a.proximoPagamento);
+  //   return a.status !== 'Em dia' && d && d < hoje;
+  // });
 
   const pagamentosMesAtual = alunos.filter((a) => {
     const data = parseData(a.ultimoPagamento);
@@ -113,6 +122,26 @@ const FinanceiroPage = () => {
       data.getFullYear() === anoSelecionado
     );
   });
+
+  const iniciarEdicao = (aluno) => {
+    const valorCalculado = calcularValorPacote(aluno); // ← já retorna o valor final (ex: 380)
+
+    setEditandoId(aluno.id);
+    setDadosEditados({
+      valorPacote: valorCalculado, // ← aqui está o pulo do gato
+    });
+  };
+
+  // const salvarEdicaoPacote = (alunoId) => {
+  //   atualizarCampoAluno(alunoId, {
+  //     valorPersonalizado: dadosEditados.pacote,
+  //   });
+  //   setEditandoId(null);
+  // };
+
+  const alunosOrdenados = [...alunos].sort((a, b) =>
+    a.nome.localeCompare(b.nome)
+  );
 
   return (
     <div className={styles.financeiroContainer}>
@@ -160,11 +189,113 @@ const FinanceiroPage = () => {
           </tr>
         </thead>
         <tbody>
-          {alunosFiltrados.map((aluno) => (
+          {alunosOrdenados.map((aluno) => (
             <tr key={aluno.id}>
               <td>{aluno.nome}</td>
-              <td>{aluno.pacoteAulas}</td>
-              <td>R$ {calcularValorPacote(aluno)}</td>
+              <td>
+                {editandoId === `aulas-${aluno.id}` ? (
+                  <>
+                    <input
+                      type="number"
+                      value={dadosEditados.aulasRealizadas}
+                      onChange={(e) =>
+                        setDadosEditados({
+                          ...dadosEditados,
+                          aulasRealizadas: e.target.value,
+                        })
+                      }
+                      className={styles.inputAulas}
+                    />
+                    / {aluno.pacoteAulas}
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => {
+                        atualizarCampoAluno(aluno.id, {
+                          aulasRealizadas: Number(
+                            dadosEditados.aulasRealizadas
+                          ),
+                        });
+                        setEditandoId(null);
+                      }}
+                      title="Salvar"
+                    >
+                      <Check size={18} />
+                    </button>
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => setEditandoId(null)}
+                      title="Cancelar"
+                    >
+                      <X size={18} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {aluno.aulasRealizadas || 0}/{aluno.pacoteAulas}
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => {
+                        setEditandoId(`aulas-${aluno.id}`);
+                        setDadosEditados({
+                          aulasRealizadas: aluno.aulasRealizadas || 0,
+                        });
+                      }}
+                      title="Editar aulas realizadas"
+                    >
+                      <Edit size={18} />
+                    </button>
+                  </>
+                )}
+              </td>
+              <td>
+                {editandoId === aluno.id ? (
+                  <>
+                    <input
+                      type="number"
+                      value={dadosEditados.valorPacote}
+                      onChange={(e) =>
+                        setDadosEditados({
+                          ...dadosEditados,
+                          valorPacote: e.target.value,
+                        })
+                      }
+                    />
+
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => {
+                        const novoValor = Number(dadosEditados.valorPacote);
+                        atualizarCampoAluno(aluno.id, {
+                          valorPersonalizadoTotal: novoValor,
+                        });
+                        setEditandoId(null);
+                      }}
+                      title="Salvar"
+                    >
+                      <Check size={18} />
+                    </button>
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => setEditandoId(null)}
+                      title="Cancelar"
+                    >
+                      <X size={18} />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    R$ {calcularValorPacote(aluno)}
+                    <button
+                      className={styles.btnIcon}
+                      onClick={() => iniciarEdicao(aluno)}
+                      title="Editar valor"
+                    >
+                      <Edit size={18} />
+                    </button>
+                  </>
+                )}
+              </td>
+
               <td>
                 <input
                   type="date"
@@ -177,12 +308,19 @@ const FinanceiroPage = () => {
                 />
               </td>
               <td>
-                {aluno.proximoPagamento
-                  ? formatarDataParaExibicao(parseData(aluno.proximoPagamento))
-                  : '-'}
+                <input
+                  type="date"
+                  value={formatarDataParaInput(
+                    parseData(aluno.ultimoPagamento)
+                  )}
+                  onChange={(e) =>
+                    alterarUltimoPagamento(aluno.id, e.target.value)
+                  }
+                />
               </td>
               <td>
                 <select
+                  className={styles.selectStatus}
                   value={aluno.status || ''}
                   onChange={(e) => alterarStatus(aluno.id, e.target.value)}
                 >

@@ -5,7 +5,7 @@ import { Bell, CalendarPlus, User, UserPlus } from 'lucide-react';
 import { useAulas } from '../hooks/useAulas';
 import NotificationDropdown from './NotificationDropdown';
 import NovaAulaModal from './NovaAulaModal';
-import NovoAlunoModal from './NovoAlunoModal';
+// import NovoAlunoModal from './NovoAlunoModal';
 import { useAlunos } from '../context/AlunosContext'; // << IMPORTANTE
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ const Navbar = () => {
   const { usuario } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showNovaAula, setShowNovaAula] = useState(false);
-  const [showNovoAluno, setShowNovoAluno] = useState(false);
+  // const [showNovoAluno, setShowNovoAluno] = useState(false);
 
   const { t } = useTranslation();
 
@@ -54,20 +54,20 @@ const Navbar = () => {
 
       <div className={styles.right}>
         {/* Botão Criar Aula */}
-        <button
+        {/* <button
           className={styles.novaAulaButton}
           onClick={() => setShowNovaAula(true)}
         >
           <CalendarPlus size={18} /> Nova Aula
-        </button>
+        </button> */}
 
         {/* Botão Cadastrar Aluno */}
-        <button
+        {/* <button
           className={styles.novoAlunoButton}
           onClick={() => setShowNovoAluno(true)}
         >
           <UserPlus size={18} /> Novo Aluno
-        </button>
+        </button> */}
 
         {/* Notificações */}
         <div className={styles.notificationWrapper}>
@@ -98,12 +98,12 @@ const Navbar = () => {
         />
       )}
 
-      {showNovoAluno && (
+      {/* {showNovoAluno && (
         <NovoAlunoModal
           onClose={() => setShowNovoAluno(false)}
           onSave={handleNovoAlunoSave} // ✅ Agora sim!
         />
-      )}
+      )} */}
     </header>
   );
 };
