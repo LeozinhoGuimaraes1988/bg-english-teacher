@@ -67,3 +67,9 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# Firebase Admin Keys (não versionar nunca!)
+backend/src/services/chave_privada.json
+admin-config.json
+*.key.json
+*.serviceaccount.json

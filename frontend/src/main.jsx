@@ -4,9 +4,8 @@ import { ConfiguracoesProvider } from './context/ConfiguracoesContext';
 import { AuthProvider } from './context/AuthContext';
 import './i18n/index.js';
 
-import App from '../App';
-
-import '../src/styles/global.css';
+import App from '../App'; // 🔥 corrigido
+import './styles/global.css'; // 🔥 corrigido
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
