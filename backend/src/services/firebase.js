@@ -11,11 +11,10 @@ if (!admin.apps.length) {
     process.env.FUNCTIONS_EMULATOR || process.env.NODE_ENV === 'development';
 
   if (isLocal) {
-    // Carrega config local (ex.: vindo do seu config/index.js)
+    // Ambiente local
     const { config } = await import('../config/index.js');
     const raw = config?.firebaseAdmin || {};
 
-    // Normaliza: aceita camelCase OU snake_case
     const projectId = coalesce(
       raw.projectId,
       raw.project_id,
@@ -26,7 +25,6 @@ if (!admin.apps.length) {
       raw.client_email,
       process.env.FIREBASE_CLIENT_EMAIL
     );
-    // Pode vir com \n escapado no .env
     const privateKey = coalesce(
       raw.privateKey,
       raw.private_key,
@@ -49,9 +47,6 @@ if (!admin.apps.length) {
         '❌ adminConfig incompleto no ambiente local. Faltando:',
         missing.join(', ')
       );
-      console.error(
-        '➡️  Verifique backend/src/config/index.js ou variáveis .env'
-      );
       throw new Error('Firebase Admin credenciais ausentes.');
     }
 
@@ -66,12 +61,10 @@ if (!admin.apps.length) {
       storageBucket,
     });
   } else {
-    // Produção (Functions Gen2 / Render com ADC)
+    // Produção (Render)
     admin.initializeApp({
       credential: admin.credential.applicationDefault(),
-      storageBucket: process.env.GCLOUD_PROJECT
-        ? `${process.env.GCLOUD_PROJECT}.appspot.com`
-        : undefined,
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET, // ✅ agora sempre definido
     });
   }
 }
