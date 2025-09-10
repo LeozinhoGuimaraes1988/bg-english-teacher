@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { api } from '../services/apiBase';
 
 const Login = ({ onLoginSucess }) => {
   const [email, setEmail] = useState('');
@@ -13,11 +14,9 @@ const Login = ({ onLoginSucess }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/auth/login', {
+      const response = await api('/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();

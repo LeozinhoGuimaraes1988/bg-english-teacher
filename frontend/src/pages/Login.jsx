@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-
+import { api } from '../services/apiBase';
 import { auth } from '../firebase/config';
 import { loginWithGoogle } from '../authentication/auth';
 import { useAuth } from '../context/AuthContext';
@@ -46,7 +46,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:4000/auth/login', {
+      const response = await api('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

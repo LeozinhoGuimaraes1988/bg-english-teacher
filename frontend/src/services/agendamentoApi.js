@@ -1,17 +1,22 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:4001/api/agendamentos'; // ajuste se usar outra porta
+import { api } from './apiBase';
 
 export const fetchAgendamentos = async () => {
-  const response = await axios.get(API_URL);
-  return response.data;
+  const res = await api('/agendamentos');
+  if (!res.ok) throw new Error('Erro ao buscar agendamentos');
+  return res.json();
 };
 
 export const salvarAgendamento = async (novo) => {
-  const response = await axios.post(API_URL, novo);
-  return response.data;
+  const res = await api('/agendamentos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(novo),
+  });
+  if (!res.ok) throw new Error('Erro ao salvar agendamento');
+  return res.json();
 };
 
 export const removerAgendamento = async (id) => {
-  await axios.delete(`${API_URL}/${id}`);
+  const res = await api(`/agendamentos/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error('Erro ao remover agendamento');
 };
