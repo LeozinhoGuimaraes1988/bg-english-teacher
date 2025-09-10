@@ -1,54 +1,48 @@
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from './firebase.js';
+import { db } from '../services/firebaseAdmin.js'; // usa o serviço que você já tem
 
 export const getDashboard = async () => {
   try {
-    // Buscando todos os alunos
-    const alunosSnapshot = await getDocs(collection(db, 'alunos'));
+    // Total de alunos
+    const alunosSnapshot = await db.collection('alunos').get();
     const totalAlunos = alunosSnapshot.size;
 
-    // Buscando aulas do dia
+    // Hoje (00:00 até 23:59)
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
     const fimDoDia = new Date(hoje);
     fimDoDia.setHours(23, 59, 59, 999);
 
-    const aulasHojeQuery = query(
-      collection(db, 'aulas'),
-      where('data', '>=', hoje),
-      where('data', '<=', fimDoDia)
-    );
-
-    const aulasHojeSnapshot = await getDocs(aulasHojeQuery);
+    const aulasHojeSnapshot = await db
+      .collection('aulas')
+      .where('data', '>=', hoje)
+      .where('data', '<=', fimDoDia)
+      .get();
     const aulasHoje = aulasHojeSnapshot.size;
 
-    // Buscando aulas da semana
+    // Próximos 7 dias
     const fimDaSemana = new Date(hoje);
     fimDaSemana.setDate(fimDaSemana.getDate() + 7);
 
-    const aulasSemanaQuery = query(
-      collection(db, 'aulas'),
-      where('data', '>=', hoje),
-      where('data', '<=', fimDaSemana)
-    );
-
-    const aulasSemanaSnapshot = await getDocs(aulasSemanaQuery);
+    const aulasSemanaSnapshot = await db
+      .collection('aulas')
+      .where('data', '>=', hoje)
+      .where('data', '<=', fimDaSemana)
+      .get();
     const aulasSemana = aulasSemanaSnapshot.size;
 
-    // Calculando crescimento mensal
+    // Crescimento mensal
     const inicioDoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    const alunosNovosMesQuery = query(
-      collection(db, 'alunos'),
-      where('dataDeCadastro', '>=', inicioDoMes)
-    );
 
-    const alunosNovosMesSnapshot = await getDocs(alunosNovosMesQuery);
+    const alunosNovosMesSnapshot = await db
+      .collection('alunos')
+      .where('dataDeCadastro', '>=', inicioDoMes)
+      .get();
+
     const crescimentoMensal =
       totalAlunos > 0
         ? ((alunosNovosMesSnapshot.size / totalAlunos) * 100).toFixed(1)
         : 0;
 
-    // Retornando os dados para o dashboard
     return {
       totalAlunos,
       aulasHoje,

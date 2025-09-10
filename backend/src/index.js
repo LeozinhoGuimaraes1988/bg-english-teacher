@@ -21,6 +21,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined')); // logs detalhados, estilo Apache
 }
 
+// backend/src/index.js (ou app.js)
+app.get('/api/health', (req, res) => res.status(200).json({ ok: true }));
+
 // Rota inicial
 app.get('/', (req, res) => {
   res.send('Servidor do BG English Teacher está funcionando!');

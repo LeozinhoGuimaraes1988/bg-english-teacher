@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Calendar, Clock } from 'lucide-react';
 import styles from './AtividadesRecentes.module.css';
+import { api } from '../services/apiBase'; // << usa o helper
 
 const AtividadesRecentes = () => {
   const [atividades, setAtividades] = useState([]);
@@ -9,35 +10,42 @@ const AtividadesRecentes = () => {
 
   useEffect(() => {
     const fetchAtividades = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Pega token de autenticação
-        const dataFim = new Date().toISOString().split('T')[0]; // Data atual em formato YYYY-MM-DD
-        const dataInicio = new Date();
-        dataInicio.setDate(dataInicio.getDate() - 7); // Data de 7 dias atrás - split('T')[0] pega só a parte da data (remove hora)
+      setLoading(true);
+      setError(null);
 
-        const response = await fetch(
-          `http://localhost:3000/api/aulas?dataInicio=${
-            dataInicio.toISOString().split('T')[0]
-          }&dataFim=${dataFim}`,
+      try {
+        // datas: hoje e 7 dias atrás (YYYY-MM-DD)
+        const hoje = new Date();
+        const dataFim = hoje.toISOString().slice(0, 10);
+        const dIni = new Date(hoje);
+        dIni.setDate(dIni.getDate() - 7);
+        const dataInicio = dIni.toISOString().slice(0, 10);
+
+        // se você usa token próprio salvo no localStorage
+        const token = localStorage.getItem('token');
+
+        // chamada via helper (ele resolve localhost/Render/Hosting automaticamente)
+        const res = await api(
+          `/aulas?dataInicio=${dataInicio}&dataFim=${dataFim}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           }
         );
 
-        if (!response.ok) {
-          throw new Error('Erro ao buscar atividades.');
-        }
+        if (!res.ok) throw new Error('Erro ao buscar atividades.');
 
-        const data = await response.json(); // Converte resposta para JSON
-        setAtividades(data.sort((a, b) => new Date(b.data) - new Date(a.data)));
+        const dados = await res.json();
+
+        // ordena desc por data
+        dados.sort((a, b) => new Date(b.data) - new Date(a.data));
+        setAtividades(dados);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'Erro inesperado.');
       } finally {
         setLoading(false);
       }
     };
+
     fetchAtividades();
   }, []);
 
@@ -63,21 +71,14 @@ const AtividadesRecentes = () => {
     }
   };
 
-  if (loading) {
-    return <div className={styles.loading}></div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
-
-  if (atividades.length === 0) {
+  if (loading) return <div className={styles.loading}></div>;
+  if (error) return <div className={styles.error}>{error}</div>;
+  if (atividades.length === 0)
     return (
       <div className={styles.empty}>
         Nenhuma atividade registrada nos últimos dias.
       </div>
     );
-  }
 
   return (
     <div className={styles.container}>
