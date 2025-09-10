@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { api } from '../services/apiBase';
 
 const Register = ({ onRegisterSucess }) => {
   const [formData, setFormData] = useState({
@@ -32,7 +33,7 @@ const Register = ({ onRegisterSucess }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/auth/register', {
+      const response = await api('/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

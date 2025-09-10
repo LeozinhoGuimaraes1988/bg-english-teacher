@@ -6,18 +6,15 @@ import { AulasRealizadasProvider } from './src/context/AulasRealizadasContext';
 import { AuthProvider } from './src/context/AuthContext'; // caso ainda não tenha incluído
 import { AgendamentosProvider } from './src/context/AgendamentosContext';
 
-// import Dashboard from '../frontend/src/pages/Dashboard';
 import Home from '../frontend/src/pages/Home';
 import Sidebar from '../frontend/src/components/Sidebar';
 import AgendamentoAula from '../frontend/src/components/AgendamentoAula';
 import Navbar from './src/components/Navbar';
-import Graficos from './src/pages/Graficos';
 import AlunosPage from './src/pages/AlunosPage';
 import AulasAgendadasPage from './src/pages/AulasAgendadasPage';
 import AulasRealizadas from './src/pages/AulasRealizadasPage';
 import FinanceiroPage from './src/pages/FinanceiroPage';
 import PerfilAluno from '../frontend/src/components/PerfilAluno';
-import Calendario from '../frontend/src/components/Calendario';
 import AlunoDetalhes from './src/pages/AlunoDetalhes';
 import ConfiguracoesPage from './src/pages/ConfiguracoesPage';
 import Login from './src/pages/Login';
@@ -50,18 +47,6 @@ function App() {
                           </ProtectedRoute>
                         }
                       />
-
-                      {/* <Route
-                      path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <Dashboard />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    /> */}
 
                       <Route
                         path="/alunos"
@@ -122,18 +107,6 @@ function App() {
                           </ProtectedRoute>
                         }
                       />
-                      {/* 
-                    <Route
-                      path="/aulas-agendadas"
-                      element={
-                        <ProtectedRoute>
-                          <>
-                            <Navbar />
-                            <AulasAgendadasPage />
-                          </>
-                        </ProtectedRoute>
-                      }
-                    /> */}
 
                       <Route
                         path="/financeiro"
@@ -154,18 +127,6 @@ function App() {
                             <>
                               <Navbar />
                               <AlunoDetalhes />
-                            </>
-                          </ProtectedRoute>
-                        }
-                      />
-
-                      <Route
-                        path="/graficos"
-                        element={
-                          <ProtectedRoute>
-                            <>
-                              <Navbar />
-                              <Graficos />
                             </>
                           </ProtectedRoute>
                         }

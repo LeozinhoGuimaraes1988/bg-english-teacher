@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-// import { Alert, AlertDescription } from '@/components/ui/alert';
 import { User, Book, Clock, Calendar, Phone, Mail } from 'lucide-react';
 import styles from './PerfilAluno.module.css';
+import { api } from '../services/apiBase'; // 👈 usa o helper central
 
 const PerfilAluno = ({ alunoId }) => {
   const [aluno, setAluno] = useState(null);
@@ -12,96 +12,83 @@ const PerfilAluno = ({ alunoId }) => {
   const [editandoNotas, setEditandoNotas] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchAluno = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(
-          `http://localhost:3001/api/alunos/${alunoId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error('Erro ao carregar dados do aluno');
-        }
-
-        const data = await response.json();
+        const res = await api(`/alunos/${alunoId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+        if (!res.ok) throw new Error('Erro ao carregar dados do aluno');
+        const data = await res.json();
+        if (!mounted) return;
         setAluno(data);
         setNotas(data.notas || '');
       } catch (err) {
-        setError(err.message);
+        if (mounted) setError(err.message || 'Erro ao carregar dados do aluno');
       }
     };
 
     const fetchHistoricoAulas = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(
-          `http://localhost:3000/api/aulas?alunoId=${alunoId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Erro ao carregar histórico de aulas');
-        }
-
-        const data = await response.json();
-        setHistoricoAulas(data);
+        const res = await api(`/aulas?alunoId=${alunoId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+        if (!res.ok) throw new Error('Erro ao carregar histórico de aulas');
+        const data = await res.json();
+        if (!mounted) return;
+        setHistoricoAulas(data || []);
       } catch (err) {
-        setError(err.message);
+        if (mounted)
+          setError(err.message || 'Erro ao carregar histórico de aulas');
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
+
+    setLoading(true);
+    setError('');
     fetchAluno();
     fetchHistoricoAulas();
+
+    return () => {
+      mounted = false;
+    };
   }, [alunoId]);
 
   const handleSalvarNotas = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(
-        `http://localhost:3000/api/alunos/${alunoId}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ notas }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Erro ao salvar notas');
-      }
+      const res = await api(`/alunos/${alunoId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ notas }),
+      });
+      if (!res.ok) throw new Error('Erro ao salvar notas');
       setEditandoNotas(false);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Erro ao salvar notas');
     }
   };
 
-  if (loading) {
-    return <div className={styles.loading}></div>;
-  }
+  if (loading) return <div className={styles.loading}></div>;
+  if (!aluno) return <div className={styles.error}>Aluno não encontrado</div>;
 
-  if (!aluno) {
-    return <div className={styles.error}>Aluno não encontrado</div>;
-  }
+  const concluidas = historicoAulas.filter(
+    (a) => a.status === 'concluida'
+  ).length;
+  const frequencia = historicoAulas.length
+    ? Math.round((concluidas / historicoAulas.length) * 100)
+    : 0;
 
   return (
     <div className={styles.container}>
-      {error && (
-        <Alert variant="destructive" className={styles.error}>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+      {error && <div className={styles.error}>{error}</div>}
 
       <div className={styles.header}>
         <div className={styles.profileInfo}>
@@ -135,15 +122,7 @@ const PerfilAluno = ({ alunoId }) => {
             <Clock className={styles.statIcon} />
             <div>
               <h3 className={styles.statLabel}>Frequência</h3>
-              <p className={styles.statValue}>
-                {Math.round(
-                  (historicoAulas.filter((aula) => aula.status === 'concluida')
-                    .length /
-                    historicoAulas.length) *
-                    100
-                )}
-                %
-              </p>
+              <p className={styles.statValue}>{frequencia}%</p>
             </div>
           </div>
           <div className={styles.statItem}>
@@ -151,7 +130,9 @@ const PerfilAluno = ({ alunoId }) => {
             <div>
               <h3 className={styles.statLabel}>Desde</h3>
               <p className={styles.statValue}>
-                {new Date(aluno.dataCadastro).toLocaleDateString()}
+                {new Date(
+                  aluno.dataCadastro || aluno.dataDeCadastro || Date.now()
+                ).toLocaleDateString()}
               </p>
             </div>
           </div>
@@ -218,4 +199,5 @@ const PerfilAluno = ({ alunoId }) => {
     </div>
   );
 };
+
 export default PerfilAluno;
